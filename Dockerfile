@@ -1,7 +1,7 @@
 # Используем официальный образ Python в качестве базового образа
 FROM python:3
 
-EXPOSE 8080
+EXPOSE 8000
 
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -15,6 +15,7 @@ COPY requirements.txt ./
 RUN python -m pip install -r requirements.txt
 
 # Устанавливаем рабочую директорию внутри контейнера
-WORKDIR /app
-COPY . /app
+WORKDIR /usr/src/app
+COPY . /app--settings=mysite.settings.prod
+
 
