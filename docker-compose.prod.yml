@@ -9,7 +9,9 @@ services:
        # Задание команды, которую нужно запустить при запуске контейнера для сервиса web
        command: gunicorn stocks_products.wsgi:application --bind 0.0.0.0:8000
        volumes:
-          - .:/usr/src/app
+           - .:/usr/src/app
+      #  volumes:
+      #      - static_volume:/usr/src/app/staticfiles
        # Открытие порта на хостовой машине и перенаправление на порт в контейнере
        expose:
         - 8000
@@ -31,9 +33,12 @@ services:
       - pgdbdata:/var/lib/postgresql/data/
   nginx:
     build: ./nginx
+    volumes:
+          - static_volume:/usr/src/app/staticfiles
     ports:
       - 1337:80
     depends_on:
       - web
 volumes:
   pgdbdata: null
+  static_volume:

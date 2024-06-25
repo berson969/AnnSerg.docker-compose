@@ -15,9 +15,14 @@ COPY requirements.txt ./
 RUN python -m pip install -r requirements.txt
 
 # Устанавливаем рабочую директорию внутри контейнера
-WORKDIR /usr/src/app
+ENV APP_HOME=/usr/src/app
+RUN mkdir $APP_HOME
+RUN mkdir $APP_HOME/staticfiles
+WORKDIR $APP_HOME
+#WORKDIR /usr/src/app
 COPY . /app--settings=mysite.settings.prod
 
+#WORKDIR $APP_HOME
 
 
 
