@@ -1,13 +1,13 @@
-version: '3.4'
-
 services:
   web:
       # Сборка образа для сервиса django из текущей директории
        build: .
       # Задание имени контейнера для сервиса django
-       container_name: django
+       container_name: web
        # Задание команды, которую нужно запустить при запуске контейнера для сервиса web
-       command: gunicorn stocks_products.wsgi:application --bind 0.0.0.0:8000
+#       command: gunicorn stocks_products.wsgi:application --bind 0.0.0.0:8000
+#       command: ["sh", "-c", "while true; do sleep 1; done"]
+#       command: ./run.sh
        volumes:
            - .:/usr/src/app
       #  volumes:
@@ -18,6 +18,7 @@ services:
       # Зависимость от другого сервиса по очередности запуска
        depends_on:
          - pgdb
+
   pgdb:
     # Использование готового образа postgres
     image: postgres:15
@@ -31,14 +32,18 @@ services:
     # Связывание тома с директорией в контейнере для сохранения данных postgres
     volumes:
       - pgdbdata:/var/lib/postgresql/data/
+
+
   nginx:
     build: ./nginx
+    container_name: nginx
     volumes:
-          - static_volume:/usr/src/app/staticfiles
+          - ./staticfiles:/usr/src/app/staticfiles
     ports:
       - 1337:80
     depends_on:
       - web
+
+
 volumes:
-  pgdbdata: null
-  static_volume:
+  pgdbdata:
